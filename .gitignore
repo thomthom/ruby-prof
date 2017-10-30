@@ -17,3 +17,6 @@ examples2
 .rvmrc
 Gemfile.lock
 /profile.callgrind.out.*
+
+ext/ruby_prof/mkmf\.log
+ext/ruby_prof/ruby_prof-x64-mingw32\.def
