@@ -14,8 +14,8 @@
     <ClCompile Include="..\rp_stack.c" />
     <ClCompile Include="..\rp_thread.c" />
     <ClCompile Include="..\ruby_prof.c" />
-    <ClCompile Include="..\st.c">
-      <Filter>st_hack</Filter>
+    <ClCompile Include="..\hack\2.2.4\st.c">
+      <Filter>Hack\Ruby 2.2.4</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -26,16 +26,25 @@
     <ClInclude Include="..\rp_thread.h" />
     <ClInclude Include="..\ruby_prof.h" />
     <ClInclude Include="..\version.h" />
-    <ClInclude Include="..\st.h">
-      <Filter>st_hack</Filter>
+    <ClInclude Include="..\hack\2.2.4\regenc.h">
+      <Filter>Hack\Ruby 2.2.4</Filter>
     </ClInclude>
-    <ClInclude Include="..\regint.h">
-      <Filter>st_hack</Filter>
+    <ClInclude Include="..\hack\2.2.4\regint.h">
+      <Filter>Hack\Ruby 2.2.4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hack\2.2.4\st.h">
+      <Filter>Hack\Ruby 2.2.4</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="st_hack">
-      <UniqueIdentifier>{91863e33-2385-4372-b930-64134c633b87}</UniqueIdentifier>
+    <Filter Include="Hack">
+      <UniqueIdentifier>{11efd1af-6f16-4f8d-900f-949419ee6ee7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hack\Ruby 2.2.4">
+      <UniqueIdentifier>{191ba8d9-fffa-4dd7-b400-c1fcd1c1b647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hack\Ruby 2.0.0">
+      <UniqueIdentifier>{6763cd2b-fe17-416c-947a-8d8d933ae06f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

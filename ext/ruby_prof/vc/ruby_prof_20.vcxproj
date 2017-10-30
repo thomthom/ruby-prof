@@ -22,6 +22,7 @@
     <ProjectGuid>{6B4978F4-3B5F-4D38-81A8-069EC28CC069}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ruby_prof</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -82,6 +83,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>ruby_prof</TargetName>
+    <TargetExt>.so</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,7 +110,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;RUBY_PROF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\MinGW\local\ruby200vc\include\ruby-2.0.0;C:\MinGW\local\ruby200vc\include\ruby-2.0.0\i386-mswin32_100;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Thomas\SourceTree\ruby-c-extension-examples\ThirdParty\include\ruby\2.2\win32_x64;C:\Users\Thomas\SourceTree\ruby-c-extension-examples\ThirdParty\include\ruby\2.2\win32_x64\x64-mswin64_140;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,8 +144,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;RUBY_PROF_EXPORTS;HAVE_STRUCT_TIMESPEC;NOT_RUBY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Thomas\SourceTree\ruby-c-extension-examples\ThirdParty\include\ruby\2.0\win32_x64;C:\Users\Thomas\SourceTree\ruby-c-extension-examples\ThirdParty\include\ruby\2.0\win32_x64\x64-mswin64_100;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32;NDEBUG;_WINDOWS;_USRDLL;RUBY_PROF_EXPORTS;HAVE_STRUCT_TIMESPEC;NOT_RUBY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Thomas\SourceTree\ruby-c-extension-examples\ThirdParty\include\ruby\2.2\win32_x64;C:\Users\Thomas\SourceTree\ruby-c-extension-examples\ThirdParty\include\ruby\2.2\win32_x64\x64-mswin64_140;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
     </ClCompile>
@@ -151,23 +154,25 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>x64-msvcrt-ruby200.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>x64-msvcrt-ruby220.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Thomas\SourceTree\ruby-c-extension-examples\ThirdParty\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>ruby_prof.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\regint.h" />
+    <ClInclude Include="..\hack\2.2.4\regenc.h" />
+    <ClInclude Include="..\hack\2.2.4\regint.h" />
+    <ClInclude Include="..\hack\2.2.4\st.h" />
     <ClInclude Include="..\rp_call_info.h" />
     <ClInclude Include="..\rp_measure.h" />
     <ClInclude Include="..\rp_method.h" />
     <ClInclude Include="..\rp_stack.h" />
     <ClInclude Include="..\rp_thread.h" />
     <ClInclude Include="..\ruby_prof.h" />
-    <ClInclude Include="..\st.h" />
     <ClInclude Include="..\version.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\hack\2.2.4\st.c" />
     <ClCompile Include="..\rp_call_info.c" />
     <ClCompile Include="..\rp_measure.c" />
     <ClCompile Include="..\rp_measure_allocations.c" />
@@ -181,7 +186,6 @@
     <ClCompile Include="..\rp_stack.c" />
     <ClCompile Include="..\rp_thread.c" />
     <ClCompile Include="..\ruby_prof.c" />
-    <ClCompile Include="..\st.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
