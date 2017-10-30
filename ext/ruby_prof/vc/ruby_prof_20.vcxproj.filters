@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\rp_call_info.c" />
+    <ClCompile Include="..\rp_measure.c" />
+    <ClCompile Include="..\rp_measure_allocations.c" />
+    <ClCompile Include="..\rp_measure_cpu_time.c" />
+    <ClCompile Include="..\rp_measure_gc_runs.c" />
+    <ClCompile Include="..\rp_measure_gc_time.c" />
+    <ClCompile Include="..\rp_measure_memory.c" />
+    <ClCompile Include="..\rp_measure_process_time.c" />
+    <ClCompile Include="..\rp_measure_wall_time.c" />
+    <ClCompile Include="..\rp_method.c" />
+    <ClCompile Include="..\rp_stack.c" />
+    <ClCompile Include="..\rp_thread.c" />
+    <ClCompile Include="..\ruby_prof.c" />
+    <ClCompile Include="..\st.c">
+      <Filter>st_hack</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\rp_call_info.h" />
+    <ClInclude Include="..\rp_measure.h" />
+    <ClInclude Include="..\rp_method.h" />
+    <ClInclude Include="..\rp_stack.h" />
+    <ClInclude Include="..\rp_thread.h" />
+    <ClInclude Include="..\ruby_prof.h" />
+    <ClInclude Include="..\version.h" />
+    <ClInclude Include="..\st.h">
+      <Filter>st_hack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\regint.h">
+      <Filter>st_hack</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="st_hack">
+      <UniqueIdentifier>{91863e33-2385-4372-b930-64134c633b87}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

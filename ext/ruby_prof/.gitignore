@@ -1,2 +1,10 @@
 *.o
 *.so
+
+# Visual Studio files
+*.vs/
+*.VC.*
+*.tlog
+
+**/Release/
+**/Debug/
