@@ -12,7 +12,7 @@
 
   The final result is an instance of a profile object which has a hash table of
   thread_data_t, keyed on the thread id.  Each thread in turn has a hash table
-  of prof_method_t, keyed on the method id.  A hash table is used for quick 
+  of prof_method_t, keyed on the method id.  A hash table is used for quick
   look up when doing a profile.  However, it is exposed to Ruby as an array.
 
   Each prof_method_t has two hash tables, parent and children, of prof_call_info_t.
@@ -158,16 +158,82 @@ prof_pop_threads(prof_profile_t* profile)
     st_foreach(profile->threads_tbl, pop_frames, (st_data_t) profile);
 }
 
+/* <TT:HACK> */
+/*
+ * For some strange reason, under SketchUp 2017+ rb_thread_current and
+ * rb_fiber_current return a different value in RubyProf when profiling.
+ * This cause RubyProf to think that there's a new thread everytime and
+ * consequently screws up the profiling.
+ *
+ * Even stranger, Thread.current.object_id always return the same ID before and
+ * after profiling. Similary, when testing with a basic Ruby C Extensions,
+ * calling rb_thread_current() and rb_obj_id() seems to return the same ID
+ * as Thread.current.object_id.
+ *
+ * Why this happens only in this gem is a mystery. Ruby was upgraded in
+ * SU2017 from 2.0 to 2.2, but in standalone Ruby 2.2 RubyProf works just fine.
+ * SU2017 also introduced Chromium webdialogs, which require inter-process
+ * communication. Could this affect thread info? (Still the questions would be
+ * why it only affect this gem.)
+ *
+ * This gem have a Visual Studio solution, however, I have not been able to
+ * make it compile. It fails during linking due to missing st_* functions.
+ * Maybe the Ruby the rake/mingw export more symbols than the one we have for
+ * SketchUp? Though SketchUp use the mingw builds - so one would think it would
+ * be the same.
+ *
+ * Meanwhile, this hack verifies that the issues with RubyProf under SU2017+
+ * stems from rb_thread_current and rb_fiber_current unexpectedly returning
+ * different values during profiling.
+ *
+ * The hack simple cache the first thread and fiber id and use that for the
+ * remainder of the execution. This means multiple threads will get screwed up,
+ * but the SketchUp API can only be used from the main thread anyway so it
+ * should short of some very rare edge cases. Even getting additional Ruby
+ * threads under SketchUp is a challenge, since it appear to rely on the main
+ * thread to pump the other threads. This doesn't happen in SketchUp for some
+ * reason, maybe beause it's a desktop application and the main thread is
+ * managed in a different way.
+ *
+ * Anyway - quick and very dirty hack that allows RubyProf to keep running
+ * in SU2017+. If you have stumbled upon this and read until this point, I
+ * salute you!
+ *
+ * -thomthom
+ */
+static VALUE hack_thread_id = Qnil;
+static VALUE
+get_thread_id()
+{
+    if (NIL_P(hack_thread_id))
+        hack_thread_id = rb_obj_id(rb_thread_current());
+    return hack_thread_id;
+}
+
+static VALUE hack_fiber_id = Qnil;
+static VALUE
+get_fiber_id()
+{
+    if (NIL_P(hack_fiber_id))
+        hack_fiber_id = rb_obj_id(rb_fiber_current());
+    return hack_fiber_id;
+}
+/* </TT:HACK> */
+
 /* ===========  Profiling ================= */
 static void
 prof_trace(prof_profile_t* profile, rb_event_flag_t event, ID mid, VALUE klass, double measurement)
 {
     static VALUE last_fiber_id = Qnil;
 
-    VALUE thread = rb_thread_current();
-    VALUE thread_id = rb_obj_id(thread);
-    VALUE fiber = rb_fiber_current();
-    VALUE fiber_id = rb_obj_id(fiber);
+    /* <TT:HACK> */
+    // VALUE thread = rb_thread_current();
+    // VALUE thread_id = rb_obj_id(thread);
+    // VALUE fiber = rb_fiber_current();
+    // VALUE fiber_id = rb_obj_id(fiber);
+    VALUE thread_id = get_thread_id();
+    VALUE fiber_id = get_fiber_id();
+    /* </TT:HACK> */
     const char* class_name = NULL;
     const char* method_name = rb_id2name(mid);
     const char* source_file = rb_sourcefile();
@@ -196,9 +262,9 @@ static void
 prof_event_hook(rb_event_flag_t event, VALUE data, VALUE self, ID mid, VALUE klass)
 {
     prof_profile_t* profile = prof_get_profile(data);
-    VALUE thread = Qnil;
+    // VALUE thread = Qnil; /* <TT:HACK> */
     VALUE thread_id = Qnil;
-    VALUE fiber = Qnil;
+    // VALUE fiber = Qnil; /* <TT:HACK> */
     VALUE fiber_id = Qnil;
     thread_data_t* thread_data = NULL;
     prof_frame_t *frame = NULL;
@@ -224,10 +290,14 @@ prof_event_hook(rb_event_flag_t event, VALUE data, VALUE self, ID mid, VALUE kla
     }
 
     /* Get the current thread and fiber information. */
-    thread = rb_thread_current();
-    thread_id = rb_obj_id(thread);
-    fiber = rb_fiber_current();
-    fiber_id = rb_obj_id(fiber);
+    /* <HACK> */
+    // thread = rb_thread_current();
+    // thread_id = rb_obj_id(thread);
+    // fiber = rb_fiber_current();
+    // fiber_id = rb_obj_id(fiber);
+    thread_id = get_thread_id();
+    fiber_id = get_fiber_id();
+    /* </HACK> */
 
     /* Don't measure anything if the include_threads option has been specified
        and the current thread is not in the list
@@ -556,17 +626,17 @@ prof_start(VALUE self)
 
     /* open trace file if environment wants it */
     trace_file_name = getenv("RUBY_PROF_TRACE");
-    if (trace_file_name != NULL) 
+    if (trace_file_name != NULL)
     {
-      if (strcmp(trace_file_name, "stdout") == 0) 
+      if (strcmp(trace_file_name, "stdout") == 0)
       {
         trace_file = stdout;
-      } 
+      }
       else if (strcmp(trace_file_name, "stderr") == 0)
       {
         trace_file = stderr;
       }
-      else 
+      else
       {
         trace_file = fopen(trace_file_name, "w");
       }
