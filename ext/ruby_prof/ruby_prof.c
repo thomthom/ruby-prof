@@ -840,5 +840,7 @@ void Init_ruby_prof()
 
     rb_define_method(cProfile, "exclude_method!", prof_exclude_method, 2);
 
+    rb_define_const(mProf, "SKETCHUP_BUILD", Qtrue);
+
     cExcludeCommonMethods = rb_define_class_under(cProfile, "ExcludeCommonMethods", rb_cObject);
 }
