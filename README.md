@@ -2,7 +2,7 @@
 
 This fork is a dirty hack to get RubyProf operating under SketchUp 2017+.
 RubyProf used to work within SketchUp out of the box, but with SketchUp 2017 it
-started working properly. It's not clear if it's due to upgrading to Ruby 2.2
+stopped working properly. It's not clear if it's due to upgrading to Ruby 2.2
 or something else. (Maybe Chromiums processes or message pump is
 interfering... ?)
 
